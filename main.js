@@ -11,7 +11,7 @@ var cropper = document.createElement("canvas");
 cropper.width = 8;
 cropper.height = 8;
 var cropperCtx = cropper.getContext("2d");
-cropperCtx.drawImage(bgImg,0,1*8,8,8,8,0,8,8);
+cropperCtx.drawImage(bgImg,8,0,8,8,0,0,8,8);
 sprites[2] = new Image();
 sprites[2].src = cropper.toDataURL();
 
