@@ -1,20 +1,42 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
+document.addEventListener("mouseup", mouseUpHandler, false);
 
-var gameSquaresStr = ""+
-"0000000000000000000000000000" +
-"0000000000000000000000000000" +
-"0000000000000000000000000000" +
-"1111111111111111111111111111" +
-"1000000000000110000000000001" +
-"1011110111110110000000000001" +
-"1011110111110110000000000001" +
-"1011110111110110000000000001" +
-"1000000000000000000000000001" +
-"1011110000000000000000000001" +
-"1011110000000000000000000001" +
-"1000000000000000000000000001" +
-"1111110000000000000000111111";
+bgImg = new Image();
+bgImg.src = 'sheet1.png';
+
+var sprites = [];
+
+var cropper = document.createElement("canvas");
+cropper.width = 8;
+cropper.height = 8;
+var cropperCtx = cropper.getContext("2d");
+cropperCtx.drawImage(bgImg,0,1*8,8,8,8,0,8,8);
+sprites[2] = new Image();
+sprites[2].src = cropper.toDataURL();
+
+
+//ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+
+function mouseUpHandler(e) {
+var rect = canvas.getBoundingClientRect();
+relativeX = e.clientX - rect.left;
+relativeY = e.clientY - rect.top;
+var selectionX = Math.ceil(relativeX/560*28)-1;
+  var selectionY = Math.ceil(relativeY/720*36)-1;
+  var selection = (((selectionY*28)-1)+selectionX)+1;
+  gameSquares[selection] ++;
+}
+
+function createString(){
+  var output = "";
+  for(var i = 0; i<gameSquares.length; i++){
+    output = output + gameSquares[i];
+  }
+  return output;
+}
+
+var gameSquaresStr = "";
 var gameSquares = [];
 for(var i = 0; i<28*36; i++){
   var thingToPush = 0;
@@ -45,8 +67,7 @@ function displayWalls(){
 }
 
 
-bgImg = new Image();
-bgImg.src = 'sheet1.png';
+
 
 
 function gridOverlay(){
