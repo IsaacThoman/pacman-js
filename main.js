@@ -5,78 +5,88 @@ const ctx = canvas.getContext("2d");
 bgImg = new Image();
 bgImg.src = 'sheet1.png';
 
-var sprites = [];
+var wallSprites = [];
+var playerSprites = [];
 
-var cropper = document.createElement("canvas");
-cropper.width = 8;
-cropper.height = 8;
-var cropperCtx = cropper.getContext("2d");
+for(var i = 0; i<=16;i++){
+  wallSprites[i] = new Image();
+  playerSprites[i] = new Image();
+}
+
 var spritesReady = false;
 bgImg.onload = function() {
+  var cropper = document.createElement("canvas");
+  cropper.width = 8;
+  cropper.height = 8;
+  var cropperCtx = cropper.getContext("2d");
 
   cropperCtx.drawImage(bgImg, 8, 0, 8, 8, 0, 0, 8, 8); //horizontal wall top
-  sprites[1] = new Image();
-  sprites[1].src = cropper.toDataURL();
+  wallSprites[1].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 8, 30 * 8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[2] = new Image();
-  sprites[2].src = cropper.toDataURL();
+  wallSprites[2].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 0, 1*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[3] = new Image();
-  sprites[3].src = cropper.toDataURL();
+  wallSprites[3].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 27*8, 1*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[4] = new Image();
-  sprites[4].src = cropper.toDataURL();
+  wallSprites[4].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 0, 0, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[5] = new Image();
-  sprites[5].src = cropper.toDataURL();
+  wallSprites[5].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 27*8, 0, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[6] = new Image();
-  sprites[6].src = cropper.toDataURL();
+  wallSprites[6].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 27*8, 9*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[7] = new Image();
-  sprites[7].src = cropper.toDataURL();
+  wallSprites[7].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 0, 9*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[8] = new Image();
-  sprites[8].src = cropper.toDataURL();
+  wallSprites[8].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 22*8, (12-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[9] = new Image();
-  sprites[9].src = cropper.toDataURL();
+  wallSprites[9] = new Image();
+  wallSprites[9].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 5*8, (18-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[10] = new Image();
-  sprites[10].src = cropper.toDataURL();
+  wallSprites[10].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 5*8, (16-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[11] = new Image();
-  sprites[11].src = cropper.toDataURL();
+  wallSprites[11].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 22*8, (16-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[12] = new Image();
-  sprites[12].src = cropper.toDataURL();
+  wallSprites[12].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 7*8, (6-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[13] = new Image();
-  sprites[13].src = cropper.toDataURL();
+  wallSprites[13].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 9*8, (7-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[14] = new Image();
-  sprites[14].src = cropper.toDataURL();
+  wallSprites[14].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 5*8, (30-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[15] = new Image();
-  sprites[15].src = cropper.toDataURL();
+  wallSprites[15].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 20*8, (13-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  sprites[16] = new Image();
-  sprites[16].src = cropper.toDataURL();
+  wallSprites[16].src = cropper.toDataURL();
+
+  cropper.width = 224;
+  cropper.height = 488;
+  cropperCtx.drawImage(bgImg,224*2+8,0,224,488,0,0,224,488)
+  let tempImg = cropperCtx.getImageData(0,0,224,488);
+  let tempImgData = tempImg.data;
+  let tempImgLength = tempImgData.length;
+  for(let i=3; i < tempImgLength; i+=4){ //iterates through each pixel's alpha
+    if(tempImgData[i-3]==0&&tempImgData[i-2]==0&&tempImgData[i-1]==0){
+      tempImgData[i] = 0;
+    }else{
+      tempImgData[i] = 255;
+    }
+  }
+  tempImg.data = tempImgData;
+  cropperCtx.putImageData(tempImg,0,0);
+  playerSprites[1].src = cropper.toDataURL()
+
+
 spritesReady = true;
 }
 
@@ -128,8 +138,7 @@ function createString(){
   return output;
 }
 
-var gameSquaresStr ="" +
-"0000000000000000000000000000000000000000000000000000000000000000000000000000000000005111111111111a911111111111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430d00g0d000g0dg0d000g0d00g0430ceeb0ceeeb0cb0ceeeb0ceeb043000000000000000000000000004309ffa09a09ffffffa09a09ffa0430ceeb0dg0ceea9eeb0dg0ceeb043000000dg0000dg0000dg000000482222a0dcffa0dg09ffbg09222270000030d9eeb0cb0ceeag04000000000030dg0000000000dg04000000000030dg09220022a0dg040000011111b0cb0400000030cb0c11111000000000040000003000000000022222a09a04000000309a09222220000030dg0c111111b0dg04000000000030dg0000000000dg04000000000030dg09ffffffa0dg040000051111b0cb0ceea9eeb0cb0c111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430ceag0ceeeb0cb0ceeeb0d9eb043000dg0000000000000000dg0004cfa0dg09a09ffffffa09a0dg09fb9eb0cb0dg0ceea9eeb0dg0cb0cea3000000dg0000dg0000dg0000004309ffffbcffa0dg09ffbcffffa0430ceeeeeeeeb0cb0ceeeeeeeeb0430000000000000000000000000048222222222222222222222222227000000000000000000000000000000000000000000000000000000000"
+var gameSquaresStr ="0000000000000000000000000000000000000000000000000000000000000000000000000000000000005111111111111a911111111111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430d00g0d000g0dg0d000g0d00g0430ceeb0ceeeb0cb0ceeeb0ceeb043000000000000000000000000004309ffa09a09ffffffa09a09ffa0430ceeb0dg0ceea9eeb0dg0ceeb043000000dg0000dg0000dg000000482222a0dcffa0dg09ffbg09222270000030d9eeb0cb0ceeag04000000000030dg0000000000dg04000000000030dg09220022a0dg040000011111b0cb0400000030cb0c11111000000000040000003000000000022222a09a04000000309a09222220000030dg0c111111b0dg04000000000030dg0000000000dg04000000000030dg09ffffffa0dg040000051111b0cb0ceea9eeb0cb0c111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430ceag0ceeeb0cb0ceeeb0d9eb043000dg0000000000000000dg0004cfa0dg09a09ffffffa09a0dg09fb9eb0cb0dg0ceea9eeb0dg0cb0cea3000000dg0000dg0000dg0000004309ffffbcffa0dg09ffbcffffa0430ceeeeeeeeb0cb0ceeeeeeeeb0430000000000000000000000000048222222222222222222222222227000000000000000000000000000000000000000000000000000000000"
 var gameSquares = [];
 for(var i = 0; i<28*36; i++){
   var thingToPush = 0;
@@ -166,7 +175,7 @@ function displayWalls(){
   for(var xSqr = 0; xSqr<28; xSqr++){
     for(var ySqr = 0; ySqr<36; ySqr++){
         if(gameSquares[ySqr*28+xSqr%36]>0){
-if(spritesReady){ctx.drawImage(sprites[gameSquares[ySqr*28+xSqr%36]],xSqr*8,ySqr*8,8,8)}
+if(spritesReady){ctx.drawImage(wallSprites[gameSquares[ySqr*28+xSqr%36]],xSqr*8,ySqr*8,8,8)}
   }}}
 }
 
@@ -186,17 +195,17 @@ function gridOverlay(){
 }
 
 function myFunction () {
- // ctx.drawImage(bgImg,0,0,224,288,0,8*3,224,288)
-
+ // ctx.drawImage(bgImg,224*2+8,0,16,16,0,0,16,16)
   ctx.beginPath();
   ctx.rect(0,0,1000,1000);
   ctx.fillStyle = "rgba(0, 0, 0, 1)";
   ctx.fill();
   ctx.closePath();
 
-
   displayWalls()
-  // gridOverlay()
+  gridOverlay()
+
+  ctx.drawImage(playerSprites[1],0,0);
    requestAnimationFrame(myFunction);
 }
 requestAnimationFrame(myFunction);
