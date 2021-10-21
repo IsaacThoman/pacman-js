@@ -2,6 +2,24 @@ const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 document.addEventListener("mouseup", mouseUpHandler, false);
 
+document.addEventListener("keydown", keyDownHandler, false);
+
+var desiredPlayerDirection = 1;
+function keyDownHandler(e){
+    if(e.keyCode===38){ //up
+        desiredPlayerDirection = 3;
+    }
+    if(e.keyCode===40){ //down
+    desiredPlayerDirection = 4;
+    }
+    if(e.keyCode===37){ //left
+    desiredPlayerDirection = 2;
+    }
+    if(e.keyCode===39){ //right
+    desiredPlayerDirection = 1;
+    }
+}
+
 bgImg = new Image();
 bgImg.src = 'sheet1.png';
 
@@ -216,8 +234,10 @@ var chompFrame = 0;
 var playerDirection = 1;
 var chompFrameChange = 1;
 
+var playerX = 13;
+var playerY = 20;
+
 function myFunction () {
-  ctx.drawImage(bgImg,224*2+8,0,16,16,0,0,16,16)
   ctx.beginPath();
   ctx.rect(0,0,1000,1000);
   ctx.fillStyle = "rgb(0,0,0)";
@@ -225,15 +245,53 @@ function myFunction () {
   ctx.closePath();
 
   displayWalls()
- // gridOverlay()
-  frameOn++;
-  if(frameOn%2 == 0){chompFrame+=chompFrameChange;}
-  if(chompFrame>=2){chompFrameChange = -1;}
-  if(chompFrame<=0){chompFrameChange = 1;}
-  var spriteToUse = chompFrame*4+playerDirection;
-  if(spriteToUse>9){spriteToUse=9;}
-  ctx.drawImage(playerSprites[spriteToUse],frameOn*1.3,0,16,16);
-  console.log(chompFrame)
+
+
+    var playerSqrX = Math.floor(playerX+0.5)
+    var playerSqrY = Math.floor(playerY+0.5)
+
+    ctx.drawImage(playerSprites[9],playerSqrX*8-4,playerSqrY*8-4)
+  //   ctx.beginPath();
+  // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
+  // ctx.fillStyle = "rgb(0,255,128)";
+  // ctx.fill();
+  // ctx.closePath();
+
+
+
+    var playerGameSquare = playerSqrX%36+playerSqrY*28
+   // console.log(gameSquares[playerGameSquare])
+
+    if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]==0){
+        playerDirection = 1;
+    }
+    if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]==0){
+        playerDirection = 2;
+    }
+    if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]==0){
+        playerDirection = 3;
+    }
+    if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]==0){
+        playerDirection = 4;
+    }
+
+    var playerSpeed = 0.2;
+
+    if(playerDirection ==1&&gameSquares[playerGameSquare+1]==0){
+        playerX+=playerSpeed;
+    }
+    if(playerDirection ==2&&gameSquares[playerGameSquare-1]==0){
+        playerX-=playerSpeed;
+    }
+    if(playerDirection ==3&&gameSquares[playerGameSquare-28]==0){
+        playerY-=playerSpeed;
+    }
+    if(playerDirection ==4&&gameSquares[playerGameSquare+28]==0){
+        playerY+=playerSpeed;
+    }
+
+  gridOverlay()
+
    requestAnimationFrame(myFunction);
 }
 requestAnimationFrame(myFunction);
