@@ -1,6 +1,6 @@
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
-//document.addEventListener("mouseup", mouseUpHandler, false);
+document.addEventListener("mouseup", mouseUpHandler, false);
 
 bgImg = new Image();
 bgImg.src = 'sheet1.png';
@@ -8,7 +8,7 @@ bgImg.src = 'sheet1.png';
 var wallSprites = [];
 var playerSprites = [];
 
-for(var i = 0; i<=16;i++){
+for(var i = 0; i<=24;i++){
   wallSprites[i] = new Image();
   playerSprites[i] = new Image();
 }
@@ -19,6 +19,12 @@ bgImg.onload = function() {
   cropper.width = 8;
   cropper.height = 8;
   var cropperCtx = cropper.getContext("2d");
+
+  var cropper2 = document.createElement("canvas");
+  cropper2.width = 16;
+  cropper2.height = 16;
+  var cropperCtx2 = cropper2.getContext("2d");
+
 
   cropperCtx.drawImage(bgImg, 8, 0, 8, 8, 0, 0, 8, 8); //horizontal wall top
   wallSprites[1].src = cropper.toDataURL();
@@ -84,10 +90,20 @@ bgImg.onload = function() {
   }
   tempImg.data = tempImgData;
   cropperCtx.putImageData(tempImg,0,0);
-  playerSprites[1].src = cropper.toDataURL()
+  playerSprites[0].src = cropper.toDataURL()
 
+let count = 0;
+  for(let x = 0; x<=4; x++){
+    for(let y = 0; y<=3; y++){
+      count++;
+      if(count<=9){
+      cropperCtx2.clearRect(0,0,16,16);
+      cropperCtx2.drawImage(playerSprites[0],x*16,y*16,16,16,0,0,16,16);
+      playerSprites[count].src = cropper2.toDataURL();}
+    }
+  }
 
-spritesReady = true;
+  spritesReady = true;
 }
 
 //ctx.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
@@ -99,11 +115,13 @@ relativeY = e.clientY - rect.top;
 var selectionX = Math.ceil(relativeX/560*28)-1;
   var selectionY = Math.ceil(relativeY/720*36)-1;
   var selection = (((selectionY*28)-1)+selectionX)+1;
-  if(gameSquares[selection]==0){
-    gameSquares[selection] = TMD;
-  }else{
-    gameSquares[selection] = 0;
-  }
+
+
+  // if(gameSquares[selection]==0){
+  //   gameSquares[selection] = TMD;
+  // }else{
+  //   gameSquares[selection] = 0;
+  // }
   console.log(selectionX+", "+selectionY)
 }
 
@@ -193,19 +211,29 @@ function gridOverlay(){
 
 
 }
+var frameOn = 0;
+var chompFrame = 0;
+var playerDirection = 1;
+var chompFrameChange = 1;
 
 function myFunction () {
- // ctx.drawImage(bgImg,224*2+8,0,16,16,0,0,16,16)
+  ctx.drawImage(bgImg,224*2+8,0,16,16,0,0,16,16)
   ctx.beginPath();
   ctx.rect(0,0,1000,1000);
-  ctx.fillStyle = "rgba(0, 0, 0, 1)";
+  ctx.fillStyle = "rgb(0,0,0)";
   ctx.fill();
   ctx.closePath();
 
   displayWalls()
-  gridOverlay()
-
-  ctx.drawImage(playerSprites[1],0,0);
+ // gridOverlay()
+  frameOn++;
+  if(frameOn%2 == 0){chompFrame+=chompFrameChange;}
+  if(chompFrame>=2){chompFrameChange = -1;}
+  if(chompFrame<=0){chompFrameChange = 1;}
+  var spriteToUse = chompFrame*4+playerDirection;
+  if(spriteToUse>9){spriteToUse=9;}
+  ctx.drawImage(playerSprites[spriteToUse],frameOn*1.3,0,16,16);
+  console.log(chompFrame)
    requestAnimationFrame(myFunction);
 }
 requestAnimationFrame(myFunction);
