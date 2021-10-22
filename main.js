@@ -250,32 +250,20 @@ function myFunction () {
     var playerSqrX = Math.floor(playerX+0.5)
     var playerSqrY = Math.floor(playerY+0.5)
 
-    ctx.drawImage(playerSprites[9],playerSqrX*8-4,playerSqrY*8-4)
-  //   ctx.beginPath();
-  // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
-  // ctx.fillStyle = "rgb(0,255,128)";
-  // ctx.fill();
-  // ctx.closePath();
+     ctx.drawImage(playerSprites[9],((playerX))*8-4,((playerY))*8-4)
+    console.log(playerX)
+  ctx.beginPath();
+  ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
+  ctx.fillStyle = "rgba(255,0,0,0.5)";
+  ctx.fill();
+  ctx.closePath();
 
 
 
     var playerGameSquare = playerSqrX%36+playerSqrY*28
    // console.log(gameSquares[playerGameSquare])
 
-    if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]==0){
-        playerDirection = 1;
-    }
-    if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]==0){
-        playerDirection = 2;
-    }
-    if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]==0){
-        playerDirection = 3;
-    }
-    if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]==0){
-        playerDirection = 4;
-    }
-
-    var playerSpeed = 0.2;
+    var playerSpeed = 0.3;
 
     if(playerDirection ==1&&gameSquares[playerGameSquare+1]==0){
         playerX+=playerSpeed;
@@ -290,7 +278,44 @@ function myFunction () {
         playerY+=playerSpeed;
     }
 
-  gridOverlay()
+    if(playerDirection ==1&&gameSquares[playerGameSquare+1]>0){
+        playerX = playerSqrX;
+        playerY = playerSqrY;
+    }
+    if(playerDirection ==2&&gameSquares[playerGameSquare-1]>0){
+        playerX = playerSqrX;
+        playerY = playerSqrY;
+    }
+    if(playerDirection ==3&&gameSquares[playerGameSquare-28]>0){
+        playerX = playerSqrX;
+        playerY = playerSqrY;
+    }
+    if(playerDirection ==4&&gameSquares[playerGameSquare+28]>0){
+        playerX = playerSqrX;
+        playerY = playerSqrY;
+    }
+
+    if(playerX==0){
+        playerX=26;
+    }
+    if(playerX==27){
+        playerX=1;
+    }
+
+
+    if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]==0){
+        playerDirection = 1;
+    }
+    if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]==0){
+        playerDirection = 2;
+    }
+    if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]==0){
+        playerDirection = 3;
+    }
+    if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]==0){
+        playerDirection = 4;
+    }
+//  gridOverlay()
 
    requestAnimationFrame(myFunction);
 }
