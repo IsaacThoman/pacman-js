@@ -252,7 +252,7 @@ if(spritesReady){ctx.drawImage(wallSprites[gameSquares[ySqr*28+xSqr%36]],xSqr*8,
             if(spritesReady){ctx.drawImage(pellet1,xSqr*8,ySqr*8,8,8)};
         }
         if(gameSquares[ySqr*28+xSqr%36]==-2){
-            if(spritesReady){ctx.drawImage(pellet2,xSqr*8,ySqr*8,8,8)};
+            if(spritesReady&&(Math.floor(frameOn/8))%2==0){ctx.drawImage(pellet2,xSqr*8,ySqr*8,8,8)};
         }
 
     }}
@@ -278,7 +278,7 @@ var playerDirection = 1;
 var chompFrameChange = 1;
 
 var playerX = 13;
-var playerY = 20;
+var playerY = 26;
 var playerMoving = true;
 function myFunction () {
   if(!spritesReady){
@@ -313,19 +313,19 @@ function myFunction () {
     gameSquares[playerGameSquare]=0;
   }
 
-  if(gameSquares[playerGameSquare]==-1){
+  if(gameSquares[playerGameSquare]==-2){
     gameSquares[playerGameSquare]=0;
   }
 
-
+    // ctx.beginPath();
+    // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
+    // ctx.fillStyle = "rgba(255,0,0,0.5)";
+    // ctx.fill();
+    // ctx.closePath();
 
      ctx.drawImage(playerSprites[spriteToUse],((playerX))*8-4,((playerY))*8-4)
  //   console.log(playerX)
-  // ctx.beginPath();
-  // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
-  // ctx.fillStyle = "rgba(255,0,0,0.5)";
-  // ctx.fill();
-  // ctx.closePath();
+
 
 
 
