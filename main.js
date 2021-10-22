@@ -25,10 +25,12 @@ bgImg.src = 'sheet1.png';
 
 var wallSprites = [];
 var playerSprites = [];
+var ghostSprites = [];
 
-for(var i = 0; i<=24;i++){
+for(var i = 0; i<=35;i++){
   wallSprites[i] = new Image();
   playerSprites[i] = new Image();
+  ghostSprites[i] = new Image();
 }
 var pellet1 = new Image();
 var pellet2 = new Image();
@@ -93,7 +95,10 @@ bgImg.onload = function() {
   wallSprites[15].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 20*8, (13-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-    wallSprites[16].src = cropper.toDataURL();
+  wallSprites[16].src = cropper.toDataURL();
+
+  cropperCtx.drawImage(bgImg, 13*8, (15-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
+  wallSprites[17].src = cropper.toDataURL();
 
     cropperCtx.drawImage(bgImg, 2*8, (1)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
     pellet1.src = cropper.toDataURL();
@@ -118,15 +123,31 @@ bgImg.onload = function() {
   cropperCtx.putImageData(tempImg,0,0);
   playerSprites[0].src = cropper.toDataURL()
 
-let count = 0;
+  let count = 0;
   for(let x = 0; x<=4; x++){
     for(let y = 0; y<=3; y++){
       count++;
       if(count<=9){
-      cropperCtx2.clearRect(0,0,16,16);
-      cropperCtx2.drawImage(playerSprites[0],x*16,y*16,16,16,0,0,16,16);
-      playerSprites[count].src = cropper2.toDataURL();}
+        cropperCtx2.clearRect(0,0,16,16);
+        cropperCtx2.drawImage(playerSprites[0],x*16,y*16,16,16,0,0,16,16);
+        playerSprites[count].src = cropper2.toDataURL();}
     }
+  }
+
+
+//ghost sprites
+  let count2 = 0;
+  for(let y = 0; y<=4; y++){
+    for(let x = 0; x<8; x++){
+      count2++;
+      if(count2<=32){
+        cropperCtx2.clearRect(0,0,16,16);
+        cropperCtx2.drawImage(playerSprites[0],x*16,(4*16)+y*16,16,16,0,0,16,16);
+        ghostSprites[count2].src = cropper2.toDataURL();}
+
+      }
+
+
   }
 
   spritesReady = true;
@@ -185,8 +206,7 @@ function createString(){
   }
   return output;
 }
-
-var gameSquaresStr ="0000000000000000000000000000000000000000000000000000000000000000000000000000000000005111111111111a911111111111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430d00g0d000g0dg0d000g0d00g0430ceeb0ceeeb0cb0ceeeb0ceeb043000000000000000000000000004309ffa09a09ffffffa09a09ffa0430ceeb0dg0ceea9eeb0dg0ceeb043000000dg0000dg0000dg000000482222a0dcffa0dg09ffbg09222270000030d9eeb0cb0ceeag04000000000030dg0000000000dg04000000000030dg09220022a0dg040000011111b0cb0400000030cb0c11111000000000040000003000000000022222a09a04000000309a09222220000030dg0c111111b0dg04000000000030dg0000000000dg04000000000030dg09ffffffa0dg040000051111b0cb0ceea9eeb0cb0c111163000000000000dg0000000000004309ffa09fffa0dg09fffa09ffa0430ceag0ceeeb0cb0ceeeb0d9eb043000dg0000000000000000dg0004cfa0dg09a09ffffffa09a0dg09fb9eb0cb0dg0ceea9eeb0dg0cb0cea3000000dg0000dg0000dg0000004309ffffbcffa0dg09ffbcffffa0430ceeeeeeeeb0cb0ceeeeeeeeb0430000000000000000000000000048222222222222222222222222227000000000000000000000000000000000000000000000000000000000"
+var gameSquaresStr = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000005111111111111a911111111111163yyyyyyyyyyyydgyyyyyyyyyyyy43y9ffay9fffaydgy9fffay9ffay43zd00gyd000gydgyd000gyd00gz43yceebyceeebycbyceeebyceeby43yyyyyyyyyyyyyyyyyyyyyyyyyy43y9ffay9ay9ffffffay9ay9ffay43yceebydgyceea9eebydgyceeby43yyyyyydgyyyydgyyyydgyyyyyy482222aydcffa0dg09ffbgy922227000003yd9eeb0cb0ceeagy400000000003ydg0000000000dgy400000000003ydg0922hh22a0dgy40000011111bycb0400000030cbyc11111000000y00040000003000y00000022222ay9a04000000309ay922222000003ydg0c111111b0dgy400000000003ydg0000000000dgy400000000003ydg09ffffffa0dgy40000051111bycb0ceea9eeb0cbyc111163yyyyyyyyyyyydgyyyyyyyyyyyy43y9ffay9fffaydgy9fffay9ffay43yceagyceeebycbyceeebyd9eby43zyydgyyyyyyyyyyyyyyyydgyyz4cfaydgy9ay9ffffffay9aydgy9fb9ebycbydgyceea9eebydgycbycea3yyyyyydgyyyydgyyyydgyyyyyy43y9ffffbcffaydgy9ffbcffffay43yceeeeeeeebycbyceeeeeeeeby43yyyyyyyyyyyyyyyyyyyyyyyyyy4822222222222222222222222222700000000000000000000000000000000000000000000000000000000"
 var gameSquares = [];
 for(var i = 0; i<28*36; i++){
   var thingToPush = 0;
@@ -227,7 +247,15 @@ function displayWalls(){
     for(var ySqr = 0; ySqr<36; ySqr++){
         if(gameSquares[ySqr*28+xSqr%36]>0){
 if(spritesReady){ctx.drawImage(wallSprites[gameSquares[ySqr*28+xSqr%36]],xSqr*8,ySqr*8,8,8)}
-  }}}
+  }
+        if(gameSquares[ySqr*28+xSqr%36]==-1){
+            if(spritesReady){ctx.drawImage(pellet1,xSqr*8,ySqr*8,8,8)};
+        }
+        if(gameSquares[ySqr*28+xSqr%36]==-2){
+            if(spritesReady){ctx.drawImage(pellet2,xSqr*8,ySqr*8,8,8)};
+        }
+
+    }}
 }
 
 
@@ -253,16 +281,25 @@ var playerX = 13;
 var playerY = 20;
 var playerMoving = true;
 function myFunction () {
+  if(!spritesReady){
+    requestAnimationFrame(myFunction);
+    return;}
   ctx.beginPath();
   ctx.rect(0,0,1000,1000);
   ctx.fillStyle = "rgb(0,0,0)";
   ctx.fill();
   ctx.closePath();
+  if(Math.floor(frameOn/4)%2==0){
+    ctx.drawImage(ghostSprites[9],0,0,16,16)
+  }else{
+    ctx.drawImage(ghostSprites[10],0,0,16,16)
+  }
 
   displayWalls()
 
     var playerSqrX = Math.floor(playerX+0.5)
     var playerSqrY = Math.floor(playerY+0.5)
+    var playerGameSquare = playerSqrX%36+playerSqrY*28
 
     frameOn++;
     if(frameOn%2 == 0&&playerMoving){chompFrame+=chompFrameChange;}
@@ -270,11 +307,20 @@ function myFunction () {
     if(chompFrame<=0){chompFrameChange = 1;}
     var spriteToUse = chompFrame*4+playerDirection;
     if(spriteToUse>9){spriteToUse=9;}
-    console.log(chompFrame)
+  //  console.log(chompFrame)
+
+  if(gameSquares[playerGameSquare]==-1){
+    gameSquares[playerGameSquare]=0;
+  }
+
+  if(gameSquares[playerGameSquare]==-1){
+    gameSquares[playerGameSquare]=0;
+  }
+
 
 
      ctx.drawImage(playerSprites[spriteToUse],((playerX))*8-4,((playerY))*8-4)
-    console.log(playerX)
+ //   console.log(playerX)
   // ctx.beginPath();
   // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
   // ctx.fillStyle = "rgba(255,0,0,0.5)";
@@ -283,21 +329,21 @@ function myFunction () {
 
 
 
-    var playerGameSquare = playerSqrX%36+playerSqrY*28
+
    // console.log(gameSquares[playerGameSquare])
 
     var playerSpeed = 0.2;
     playerMoving = true;
-    if(playerDirection ==1&&gameSquares[playerGameSquare+1]==0){
+    if(playerDirection ==1&&gameSquares[playerGameSquare+1]<1){
         playerX+=playerSpeed;
     }
-    if(playerDirection ==2&&gameSquares[playerGameSquare-1]==0){
+    if(playerDirection ==2&&gameSquares[playerGameSquare-1]<1){
         playerX-=playerSpeed;
     }
-    if(playerDirection ==3&&gameSquares[playerGameSquare-28]==0){
+    if(playerDirection ==3&&gameSquares[playerGameSquare-28]<1){
         playerY-=playerSpeed;
     }
-    if(playerDirection ==4&&gameSquares[playerGameSquare+28]==0){
+    if(playerDirection ==4&&gameSquares[playerGameSquare+28]<1){
         playerY+=playerSpeed;
     }
 
@@ -330,27 +376,29 @@ function myFunction () {
     }
 
 
-    if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]==0){
+    if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]<1){
         playerDirection = 1;
       //  playerX = playerSqrX;
         playerY = playerSqrY;
     }
-    if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]==0){
+    if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]<1){
         playerDirection = 2;
     //    playerX = playerSqrX;
         playerY = playerSqrY;
     }
-    if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]==0){
+    if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]<1){
         playerDirection = 3;
         playerX = playerSqrX;
     //    playerY = playerSqrY;
     }
-    if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]==0){
+    if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]<1){
         playerDirection = 4;
         playerX = playerSqrX;
     //    playerY = playerSqrY;
+
+
     }
-//  gridOverlay()
+ // gridOverlay()
 
    requestAnimationFrame(myFunction);
 }
