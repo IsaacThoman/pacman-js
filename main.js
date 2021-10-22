@@ -30,6 +30,8 @@ for(var i = 0; i<=24;i++){
   wallSprites[i] = new Image();
   playerSprites[i] = new Image();
 }
+var pellet1 = new Image();
+var pellet2 = new Image();
 
 var spritesReady = false;
 bgImg.onload = function() {
@@ -91,7 +93,13 @@ bgImg.onload = function() {
   wallSprites[15].src = cropper.toDataURL();
 
   cropperCtx.drawImage(bgImg, 20*8, (13-3)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
-  wallSprites[16].src = cropper.toDataURL();
+    wallSprites[16].src = cropper.toDataURL();
+
+    cropperCtx.drawImage(bgImg, 2*8, (1)*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
+    pellet1.src = cropper.toDataURL();
+
+    cropperCtx.drawImage(bgImg, 1*8, 3*8, 8, 8, 0, 0, 8, 8); //horizontal wall bottom
+    pellet2.src = cropper.toDataURL();
 
   cropper.width = 224;
   cropper.height = 488;
@@ -168,6 +176,10 @@ function createString(){
       case 17: thingToAdd = 'h'; break;
       case 18: thingToAdd = 'i'; break;
 
+        case -1: thingToAdd = 'y'; break;
+        case -2: thingToAdd = 'z'; break;
+
+
     }
     output = output + thingToAdd;
   }
@@ -197,6 +209,9 @@ for(var i = 0; i<28*36; i++){
     case 'f':thingToPush = 15; break;
     case 'g':thingToPush = 16; break;
     case 'h':thingToPush = 17; break;
+
+    case 'z':thingToPush = -2; break;
+    case 'y':thingToPush = -1; break;
   }
   gameSquares.push(thingToPush);
 }
@@ -236,7 +251,7 @@ var chompFrameChange = 1;
 
 var playerX = 13;
 var playerY = 20;
-
+var playerMoving = true;
 function myFunction () {
   ctx.beginPath();
   ctx.rect(0,0,1000,1000);
@@ -246,25 +261,33 @@ function myFunction () {
 
   displayWalls()
 
-
     var playerSqrX = Math.floor(playerX+0.5)
     var playerSqrY = Math.floor(playerY+0.5)
 
-     ctx.drawImage(playerSprites[9],((playerX))*8-4,((playerY))*8-4)
+    frameOn++;
+    if(frameOn%2 == 0&&playerMoving){chompFrame+=chompFrameChange;}
+    if(chompFrame>=2){chompFrameChange = -1;}
+    if(chompFrame<=0){chompFrameChange = 1;}
+    var spriteToUse = chompFrame*4+playerDirection;
+    if(spriteToUse>9){spriteToUse=9;}
+    console.log(chompFrame)
+
+
+     ctx.drawImage(playerSprites[spriteToUse],((playerX))*8-4,((playerY))*8-4)
     console.log(playerX)
-  ctx.beginPath();
-  ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
-  ctx.fillStyle = "rgba(255,0,0,0.5)";
-  ctx.fill();
-  ctx.closePath();
+  // ctx.beginPath();
+  // ctx.rect(playerSqrX*8,playerSqrY*8,8,8);
+  // ctx.fillStyle = "rgba(255,0,0,0.5)";
+  // ctx.fill();
+  // ctx.closePath();
 
 
 
     var playerGameSquare = playerSqrX%36+playerSqrY*28
    // console.log(gameSquares[playerGameSquare])
 
-    var playerSpeed = 0.3;
-
+    var playerSpeed = 0.2;
+    playerMoving = true;
     if(playerDirection ==1&&gameSquares[playerGameSquare+1]==0){
         playerX+=playerSpeed;
     }
@@ -281,18 +304,22 @@ function myFunction () {
     if(playerDirection ==1&&gameSquares[playerGameSquare+1]>0){
         playerX = playerSqrX;
         playerY = playerSqrY;
+        playerMoving = false;
     }
     if(playerDirection ==2&&gameSquares[playerGameSquare-1]>0){
         playerX = playerSqrX;
         playerY = playerSqrY;
+        playerMoving = false;
     }
     if(playerDirection ==3&&gameSquares[playerGameSquare-28]>0){
         playerX = playerSqrX;
         playerY = playerSqrY;
+        playerMoving = false;
     }
     if(playerDirection ==4&&gameSquares[playerGameSquare+28]>0){
         playerX = playerSqrX;
         playerY = playerSqrY;
+        playerMoving = false;
     }
 
     if(playerX==0){
@@ -305,15 +332,23 @@ function myFunction () {
 
     if(desiredPlayerDirection ==1&&gameSquares[playerGameSquare+1]==0){
         playerDirection = 1;
+      //  playerX = playerSqrX;
+        playerY = playerSqrY;
     }
     if(desiredPlayerDirection ==2&&gameSquares[playerGameSquare-1]==0){
         playerDirection = 2;
+    //    playerX = playerSqrX;
+        playerY = playerSqrY;
     }
     if(desiredPlayerDirection ==3&&gameSquares[playerGameSquare-28]==0){
         playerDirection = 3;
+        playerX = playerSqrX;
+    //    playerY = playerSqrY;
     }
     if(desiredPlayerDirection ==4&&gameSquares[playerGameSquare+28]==0){
         playerDirection = 4;
+        playerX = playerSqrX;
+    //    playerY = playerSqrY;
     }
 //  gridOverlay()
 
