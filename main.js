@@ -279,6 +279,12 @@ var chompFrameChange = 1;
 
 var playerX = 13;
 var playerY = 26;
+
+var ghostsX = [13.5,13.5,11.5,15.5];
+var ghostsY = [14,17,17,17];
+var ghostsDirection = [2,4,3,3];
+
+
 var playerMoving = true;
 function myFunction () {
   if(!spritesReady){
@@ -289,11 +295,12 @@ function myFunction () {
   ctx.fillStyle = "rgb(0,0,0)";
   ctx.fill();
   ctx.closePath();
-  if(Math.floor(frameOn/4)%2==0){
-    ctx.drawImage(ghostSprites[9],0,0,16,16)
-  }else{
-    ctx.drawImage(ghostSprites[10],0,0,16,16)
-  }
+  var ghostWiggleFrame = Math.floor(frameOn/4)%2;
+  // if(ghostWiggleFrame==0){
+  //   ctx.drawImage(ghostSprites[9],0,0,16,16)
+  // }else{
+  //   ctx.drawImage(ghostSprites[10],0,0,16,16)
+  // }
 
   displayWalls()
 
@@ -324,6 +331,11 @@ function myFunction () {
     // ctx.closePath();
 
      ctx.drawImage(playerSprites[spriteToUse],((playerX))*8-4,((playerY))*8-4)
+
+    ctx.drawImage(ghostSprites[ghostWiggleFrame+(ghostsDirection[0]*2)-1],((ghostsX[0]))*8-4,((ghostsY[0]))*8-4)
+    ctx.drawImage(ghostSprites[ghostWiggleFrame+(ghostsDirection[1]*2)-1+8],((ghostsX[1]))*8-4,((ghostsY[1]))*8-4)
+    ctx.drawImage(ghostSprites[ghostWiggleFrame+(ghostsDirection[2]*2)-1+16],((ghostsX[2]))*8-4,((ghostsY[2]))*8-4)
+    ctx.drawImage(ghostSprites[ghostWiggleFrame+(ghostsDirection[3]*2)-1+24],((ghostsX[3]))*8-4,((ghostsY[3]))*8-4)
  //   console.log(playerX)
 
 
@@ -331,7 +343,7 @@ function myFunction () {
 
 
    // console.log(gameSquares[playerGameSquare])
-
+    var ghostSpeed = 0.2;
     var playerSpeed = 0.2;
     playerMoving = true;
     if(playerDirection ==1&&gameSquares[playerGameSquare+1]<1){
