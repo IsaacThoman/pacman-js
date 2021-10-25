@@ -343,8 +343,40 @@ function myFunction () {
 
 
    // console.log(gameSquares[playerGameSquare])
-    var ghostSpeed = 0.2;
-    var playerSpeed = 0.2;
+    var ghostSpeed = 0.1;
+
+
+console.log("hey")
+
+
+  for(var ghostOn = 0; ghostOn<=3; ghostOn++){
+      var ghostSqrX = Math.floor(ghostsX[ghostOn]+0.5)
+      var ghostSqrY = Math.floor(ghostsY[ghostOn]+0.5)
+      var ghostGameSquare = ghostSqrX%36+ghostSqrY*28
+
+      if(ghostsDirection[ghostOn] ==4&&gameSquares[ghostGameSquare+28]>0){
+          ghostsDirection[ghostOn]=3
+      }
+      if(ghostsDirection[ghostOn] ==3&&gameSquares[ghostGameSquare-28]>0){
+          ghostsDirection[ghostOn]=4
+      }
+
+      if(ghostsDirection[ghostOn]==1){
+          ghostsX[ghostOn]+=ghostSpeed;
+      }
+      if(ghostsDirection[ghostOn]==2){
+          ghostsX[ghostOn]-=ghostSpeed;
+      }
+      if(ghostsDirection[ghostOn]==3){
+          ghostsY[ghostOn]-=ghostSpeed;
+      }
+      if(ghostsDirection[ghostOn]==4){
+          ghostsY[ghostOn]+=ghostSpeed;
+      }
+    }
+
+
+    var playerSpeed = 0.15;
     playerMoving = true;
     if(playerDirection ==1&&gameSquares[playerGameSquare+1]<1){
         playerX+=playerSpeed;
