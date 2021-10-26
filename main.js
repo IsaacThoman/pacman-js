@@ -346,7 +346,7 @@ function myFunction () {
     var ghostSpeed = 0.1;
 
 
-console.log("hey")
+//console.log("hey")
 
 
   for(var ghostOn = 0; ghostOn<=3; ghostOn++){
@@ -354,12 +354,57 @@ console.log("hey")
       var ghostSqrY = Math.floor(ghostsY[ghostOn]+0.5)
       var ghostGameSquare = ghostSqrX%36+ghostSqrY*28
 
-      if(ghostsDirection[ghostOn] ==4&&gameSquares[ghostGameSquare+28]>0){
-          ghostsDirection[ghostOn]=3
+      var dist1 = Math.sqrt(Math.pow((ghostSqrX+1-playerSqrX),2)+Math.pow((ghostSqrY-playerSqrY),2));
+      var dist2 = Math.sqrt(Math.pow((ghostSqrX-1-playerSqrX),2)+Math.pow((ghostSqrY-playerSqrY),2));
+      var dist3 = Math.sqrt(Math.pow((ghostSqrX-playerSqrX),2)+Math.pow((ghostSqrY-1-playerSqrY),2));
+      var dist4 = Math.sqrt(Math.pow((ghostSqrX-playerSqrX),2)+Math.pow((ghostSqrY+1-playerSqrY),2));
+      if(gameSquares[ghostGameSquare+1]>0){dist1=1000}
+      if(gameSquares[ghostGameSquare-1]>0){dist2=1000}
+      if(gameSquares[ghostGameSquare-28]>0){dist3=1000}
+      if(gameSquares[ghostGameSquare+28]>0){dist4=1000}
+      if(ghostsDirection[ghostOn]==1){dist2=1000}
+      if(ghostsDirection[ghostOn]==2){dist1=1000}
+      if(ghostsDirection[ghostOn]==3){dist4=1000}
+      if(ghostsDirection[ghostOn]==4){dist3=1000}
+
+
+      var min = Math.min(Math.min(dist1,dist2),Math.min(dist3,dist4));
+    //  if(ghostsDirection[ghostOn] ==1){
+
+          if(gameSquares[ghostGameSquare+1]<1){//1
+              if(min==dist1){
+                  ghostsDirection[ghostOn]=1;
+              }
+          }
+          if(gameSquares[ghostGameSquare-1]<1){//2
+               if(min==dist2){
+                    ghostsDirection[ghostOn]=2;
+                }
+          }
+          if(gameSquares[ghostGameSquare-28]<1){//3
+              if(min==dist3){
+                  ghostsDirection[ghostOn]=3;
+              }
+          }
+          if(gameSquares[ghostGameSquare+28]<1){//4
+              if(min==dist4){
+                  ghostsDirection[ghostOn]=4;
+              }
+          }
+
+     // }
+      if(ghostsDirection[ghostOn] ==2){
+
       }
-      if(ghostsDirection[ghostOn] ==3&&gameSquares[ghostGameSquare-28]>0){
-          ghostsDirection[ghostOn]=4
+      if(ghostsDirection[ghostOn] ==3){
+
       }
+      if(ghostsDirection[ghostOn] ==4){
+
+      }
+
+
+
 
       if(ghostsDirection[ghostOn]==1){
           ghostsX[ghostOn]+=ghostSpeed;
